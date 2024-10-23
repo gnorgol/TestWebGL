@@ -24,7 +24,8 @@
       </div>
     </div>
     <script>
-
+	
+	var unityInstance = null;
       var container = document.querySelector("#unity-container");
       var canvas = document.querySelector("#unity-canvas");
       var loadingBar = document.querySelector("#unity-loading-bar");
@@ -109,22 +110,30 @@
 
       loadingBar.style.display = "block";
 
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
+    var script = document.createElement("script");
+    script.src = loaderUrl;
+    script.onload = () => {
         createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                loadingBar.style.display = "none";
-                fullscreenButton.onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
-              }).catch((message) => {
-                alert(message);
-              });
+            progressBarFull.style.width = 100 * progress + "%";
+        }).then((instance) => {
+            unityInstance = instance; // Assignez ici
+            loadingBar.style.display = "none";
+            fullscreenButton.onclick = () => {
+                unityInstance.SetFullscreen(1);
             };
+        }).catch((message) => {
+            alert(message);
+        });
+    };
+    document.body.appendChild(script);
 
-      document.body.appendChild(script);
+    function SendImageToUnity(base64Data) {
+        if (unityInstance != null) {
+            unityInstance.SendMessage('PuzzleManager', 'OnFileUploaded', base64Data);
+        } else {
+            console.error("Unity instance is not initialized.");
+        }
+    }
 
     </script>
   </body>
