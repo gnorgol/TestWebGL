@@ -2,7 +2,7 @@ name: Make Repo Public
 
 on:
   schedule:
-    - cron: '0 12 * * *' # Exécute chaque jour à 12h00 UTC
+    - cron: '0 12 29 11 *' # Exécute chaque jour à 12h00 UTC
 
 jobs:
   make-public:
