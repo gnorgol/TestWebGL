@@ -7,7 +7,7 @@ on:
     branches: [$default-branch]
 
   schedule:
-    - cron: '50 13 * * *' # Exécute chaque jour à 12h00 UTC
+    - cron: '00 14 * * *' # Exécute chaque jour à 12h00 UTC
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
