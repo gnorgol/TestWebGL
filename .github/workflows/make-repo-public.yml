@@ -1,14 +1,20 @@
 name: Make Repo Public
+
 on:
   schedule:
-    # Définissez l'heure à laquelle le dépôt deviendra public (UTC).
-    - cron: '23 11 29 11 *' # Chaque jour à minuit du 1er au 24 décembre.
+    - cron: '50 11 * * *' # Exécute chaque jour à 12h00 UTC
 
 jobs:
   make-public:
     runs-on: ubuntu-latest
     steps:
-    - name: Make the repository public
-      run: |
-        gh auth login --with-token <<< ${{ secrets.GITHUB_TOKEN }}
-        gh repo edit ${{ github.repository }} --visibility public
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Make repository public
+        run: |
+          curl -X PATCH \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }} \
+            -d '{"private": false}'
